@@ -1,6 +1,6 @@
 
 def header(mesg = None):
-    width = 170
+    width = 150
     commission_name = 'Maharashtra Legislative Assembly Election 2024'
     conducted = 'Conducted by State Election Commission'
     head = '-' * width
