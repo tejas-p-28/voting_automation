@@ -1,6 +1,6 @@
 # from db.admin_db import admin_db
 import sqlite3
-
+from datetime import datetime
 from modules.header import head
 from modules.u_input import u_input
 max_retry = 1
@@ -47,15 +47,26 @@ def conduct_election(u_name):
         WHERE NOT EXISTS (SELECT 1 FROM constituent WHERE const_name = '{const_name}');'''
     db_cursor.execute(const)
     result =  db_cursor.fetchone()
-    for i in result:
+    if result == const_name:
         print('constituency already exists')
     else:
         print(f'{const_name} added !!!!')
+        max_retry = 3
+        for i in range(max_retry):
+            date = input('enter the date for commencement (DD-MM-YYYY) : ')
+            print('Enter the start time : ')
+            hour = input('enter Hour for the commencement : ')
+            minute = input('enter minute for the commencement : ')
+            date1 = datetime.strptime(date, '%d-%m-%y')
+            if date1 > datetime.now():
+                print(f' election to start from {date1} at {hour}:{minute} am')
+                end_date = input('enter the end date for the election : ')
+                print(f'election to be end in {end_date} days')
+                break
+            else:
+                print('please enter the date in future')
     dbc_in_file.commit()
-    db_cursor.execute('select * from constituent')
-    result1 = db_cursor.fetchall()
-    for i in result1:
-        print(i)
+    
     
     # const = f"SELECT * FROM constituent WHERE const_name = '{const_name}';"
     
@@ -64,7 +75,10 @@ def conduct_election(u_name):
 
     dbc_in_file.close()
 def add_voter():
-    print('2')
+    head.header()
+    print(r"Enter voter's details : ")
+    full_name = input('Full Name : ')
+    print('Name Stored')
 
 def update_voter():
     print('3')
