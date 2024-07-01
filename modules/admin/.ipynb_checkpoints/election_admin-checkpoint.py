@@ -55,16 +55,18 @@ def conduct_election(u_name):
         for i in range(max_retry):
             date = input('enter the date for commencement (DD-MM-YYYY) : ')
             print('Enter the start time : ')
-            hour = input('enter Hour for the commencement : ')
-            minute = input('enter minute for the commencement : ')
-            date1 = datetime.strptime(date, '%d-%m-%y')
+            hour = int(input('enter Hour for the commencement : '))
+            minute = int(input('enter minute for the commencement : '))
+            date1 = datetime.strptime(date+" " +str(hour) +":"+ str(minute) + ":00", '%d-%m-%y %H:%M:%S')
             if date1 > datetime.now():
-                print(f' election to start from {date1} at {hour}:{minute} am')
-                end_date = input('enter the end date for the election : ')
-                print(f'election to be end in {end_date} days')
+                print(f' election to start from {date1}')
                 break
             else:
                 print('please enter the date in future')
+    print('Election Details : ')
+    election_details = f'constituency : {result}'
+    print(election_details)
+    print('Returning to menu.....')
     dbc_in_file.commit()
     
     
@@ -76,10 +78,24 @@ def conduct_election(u_name):
     dbc_in_file.close()
 def add_voter():
     head.header()
+    dbc_in_file = sqlite3.connect('election_db')
+    db_cursor = dbc_in_file.cursor()
+    db_cursor.execute('''create table if not exists election_voter
+        (voter_id integer primary key autoincrement,
+        voter_name varchar(50),
+        dob date ,
+        password varchar(50));''')
+    
     print(r"Enter voter's details : ")
     full_name = input('Full Name : ')
+    voter_id = 1
+    d_o_b = input('Enter your D.O.B : ')
+    date_of_birth = datetime.strptime(d_o_b, '%d-%m-%y')
+    password = input('enter your password : ')
     print('Name Stored')
-
+    query = (f'''insert into table election_voter (voter_id,voter_name,dob,password) values(
+            {voter_id},{full_name},{date_of_birth},{password})''')
+    dbc_in_file.close()
 def update_voter():
     print('3')
 
